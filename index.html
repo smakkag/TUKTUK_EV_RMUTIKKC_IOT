@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Tuk-Tuk Dashboard</title>
+    <!-- นำเข้าไลบรารี Chart.js และ Firebase v8 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        
+        body {
+            background-color: #0B0E14;
+            padding: 20px;
+            color: #FFFFFF;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* --- โครงสร้าง Grid หลัก --- */
+        .dashboard {
+            width: 100%;
+            max-width: 1400px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1.8fr;
+            grid-template-rows: auto auto; 
+            gap: 20px;
+        }
+
+        .card {
+            background: #1C1F26;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.4);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- 1. Car Card --- */
+        .car-card { grid-column: 1 / -1; grid-row: 1; display: flex; flex-direction: column; }
+        .car-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .car-title { font-size: 24px; font-weight: 700; }
+        
+        .car-display-wrapper { 
+            position: relative;
+            flex: 1; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 280px; 
+            padding: 10px;
+            width: 100%;
+        }
+
+        /* HUD ซ้าย */
+        .hud-left {
+            position: absolute;
+            left: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .speed-val { font-size: 72px; font-weight: 700; color: #FF7A00; line-height: 1; }
+        .speed-unit { font-size: 20px; color: #8892B0; font-weight: 600; margin-bottom: 10px;}
+        .mode-badge { 
+            background: rgba(255, 122, 0, 0.1); 
+            color: #FF7A00; 
+            padding: 10px 20px; 
+            border-radius: 12px; 
+            font-weight: 700; 
+            font-size: 18px; 
+            border: 1px solid rgba(255, 122, 0, 0.3); 
+            text-align: center; 
+            letter-spacing: 1px;
+        }
+
+        /* รูปรถ */
+        .tuktuk-img {
+            max-width: 60%;
+            max-height: 320px;
+            object-fit: contain;
+            filter: drop-shadow(0px 30px 20px rgba(0, 0, 0, 0.6));
+            transform: scale(1.1);
+            transition: transform 0.3s ease;
+            z-index: 10;
+        }
+        .tuktuk-img:hover { transform: scale(1.15); }
+
+        /* HUD ขวา */
+        .hud-right {
+            position: absolute;
+            right: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 20px;
+        }
+        .indicator-row {
+            display: flex;
+            gap: 15px;
+        }
+        .indicator-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #12141A;
+            border: 2px solid #2A2D3A;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: #444; 
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        /* สถานะตอนเปิดไฟ */
+        .indicator-icon.active-green {
+            color: #00E676; border-color: #00E676; box-shadow: 0 0 15px rgba(0, 230, 118, 0.4), inset 0 0 10px rgba(0, 230, 118, 0.2);
+        }
+        .indicator-icon.active-orange {
+            color: #FF7A00; border-color: #FF7A00; box-shadow: 0 0 15px rgba(255, 122, 0, 0.4), inset 0 0 10px rgba(255, 122, 0, 0.2);
+        }
+        .indicator-icon.active-blue {
+            color: #00D2FF; border-color: #00D2FF; box-shadow: 0 0 15px rgba(0, 210, 255, 0.4), inset 0 0 10px rgba(0, 210, 255, 0.2);
+        }
+        .indicator-icon::after {
+            content: attr(data-label);
+            position: absolute;
+            bottom: -20px;
+            font-size: 11px;
+            color: #8892B0;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .gear-selector {
+            display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px;
+            background: #12141A; width: fit-content; margin: 0 auto; padding: 10px 30px; border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .gear { font-weight: 600; color: #8892B0; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s; font-size: 18px;}
+        .gear.active { background: #FF7A00; color: white; box-shadow: 0 4px 15px rgba(255, 122, 0, 0.4); }
+
+        /* --- 2. Charging Info --- */
+        .charge-card { grid-column: 1; grid-row: 2; display: flex; flex-direction: column;}
+        .card-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+        .charge-stats { display: flex; gap: 10px; margin-bottom: 30px; }
+        .c-box { flex: 1; padding: 15px 10px; border-radius: 16px; text-align: center; }
+        .c-box.batt { background: #2A2D3A; }
+        .c-box.kwh { background: rgba(255, 122, 0, 0.1); }
+        .c-box.cost { background: rgba(0, 200, 83, 0.1); }
+        .c-val { font-size: 20px; font-weight: 700; margin-top: 8px; }
+        
+        .history-list { display: flex; flex-direction: column; gap: 20px; flex: 1; overflow-y: auto;}
+        .h-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;}
+        .h-date { font-size: 14px; font-weight: 600; }
+        .h-time { font-size: 12px; color: #8892B0; margin-top: 4px; }
+        .h-power { background: rgba(0, 200, 83, 0.15); color: #00E676; padding: 6px 12px; border-radius: 12px; font-weight: 600; font-size: 14px; }
+
+        /* --- 3. Statistic Card --- */
+        .stat-card { grid-column: 2; grid-row: 2; display: flex; flex-direction: column;}
+        .tabs { display: flex; gap: 15px; margin-bottom: 25px; }
+        .tab { font-size: 13px; font-weight: 600; color: #8892B0; cursor: pointer; padding: 6px 16px; border-radius: 20px; }
+        .tab.active { background: #FF7A00; color: white; }
+        .total-usage { font-size: 14px; color: #8892B0; margin-bottom: 5px; }
+        .usage-val { font-size: 28px; font-weight: 700; margin-bottom: 20px; color: #FF7A00; }
+        .chart-wrapper { flex: 1; position: relative; min-height: 200px; }
+
+        /* --- 4. Weather Card --- */
+        .weather-card { grid-column: 3; grid-row: 2; display: flex; flex-direction: column;}
+        .w-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+        .temp-display { display: flex; gap: 10px; align-items: flex-start; }
+        .temp-val { font-size: 48px; font-weight: 700; line-height: 1; color: #FF7A00; }
+        .temp-unit { font-size: 20px; font-weight: 600; margin-top: 5px;}
+        .w-tabs { display: flex; gap: 20px; margin-bottom: 20px; }
+        .w-tab { font-size: 14px; font-weight: 600; color: #8892B0; }
+        .w-tab.active { background: #FF7A00; color: white; padding: 4px 16px; border-radius: 20px; }
+        .weather-chart-wrapper { flex: 1; position: relative; min-height: 180px; }
+
+        /* แท็กสถานะ Firebase มุมขวาบน */
+        #firebase-status { position: fixed; top: 10px; right: 20px; font-size: 12px; background: #FF5252; color: white; padding: 5px 12px; border-radius: 20px; font-weight: 600; z-index: 100;}
+    </style>
+</head>
+<body>
+
+<div id="firebase-status">Firebase Offline</div>
+
+<div class="dashboard">
+    
+    <!-- แถวบนสุด: รูปรถตุ๊กตุ๊ก -->
+    <div class="card car-card">
+        <div class="car-header">
+            <div class="car-title">TUK TUK EV RMUTI KKC Khon Kaen</div>
+        </div>
+        
+        <div class="car-display-wrapper">
+            <!-- HUD ซ้าย -->
+            <div class="hud-left">
+                <div>
+                    <div class="speed-val" id="speedVal">0</div>
+                    <div class="speed-unit">km/h</div>
+                </div>
+                <div class="mode-badge" id="modeVal">NORMAL</div>
+            </div>
+
+            <!-- รูปรถ -->
+            <img src="tuktuk.png" alt="EV Tuk-Tuk" class="tuktuk-img" onerror="this.onerror=null; this.src='https://via.placeholder.com/600x300/2A2D3A/FF7A00?text=Tuk-Tuk+Image';">
+            
+            <!-- HUD ขวา -->
+            <div class="hud-right">
+                <div class="indicator-row">
+                    <div class="indicator-icon" id="light-head" data-label="HEADLIGHT">🔆</div>
+                    <div class="indicator-icon" id="light-high" data-label="HIGH BEAM">❇️</div>
+                </div>
+                <div class="indicator-row" style="margin-top: 15px;">
+                    <div class="indicator-icon" id="light-turn-l" data-label="LEFT">⇦</div>
+                    <div class="indicator-icon" id="light-turn-r" data-label="RIGHT">⇨</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- เกียร์ -->
+        <div class="gear-selector">
+            <div class="gear" id="gear-R">R</div>
+            <div class="gear active" id="gear-N">N</div>
+            <div class="gear" id="gear-D">D</div>
+        </div>
+    </div>
+
+    <!-- แถวล่าง 1: ข้อมูลการชาร์จแบตเตอรี่ -->
+    <div class="card charge-card">
+        <div class="card-title">Last Charging Information</div>
+        <div class="charge-stats">
+            <div class="c-box batt">
+                <div style="font-size: 12px; color: #8892B0;">Percent...</div>
+                <!-- ✅ เพิ่ม ID socVal -->
+                <div class="c-val" id="socVal">0%</div>
+            </div>
+            <div class="c-box kwh">
+                <div style="font-size: 12px; color: #FF7A00;">kWh</div>
+                <!-- ✅ เพิ่ม ID kwhVal -->
+                <div class="c-val" style="color: #FF7A00;" id="kwhVal">0</div>
+            </div>
+            <div class="c-box cost">
+                <div style="font-size: 12px; color: #00E676;">Total</div>
+                <!-- ✅ เพิ่ม ID costVal -->
+                <div class="c-val" style="color: #00E676;" id="costVal">฿0.00</div>
+            </div>
+        </div>
+
+        <div class="card-title" style="font-size: 16px; margin-bottom: 15px;">History</div>
+        <!-- ✅ เพิ่ม ID historyList และนำข้อมูลจำลองออก -->
+        <div class="history-list" id="historyList">
+            <div style="font-size: 13px; color: #8892B0; text-align: center;">Waiting for data...</div>
+        </div>
+    </div>
+
+    <!-- แถวล่าง 2: กราฟสถิติ -->
+    <div class="card stat-card">
+        <div class="card-title">Statistic</div>
+        <div class="tabs">
+            <div class="tab active">24 hours</div>
+            <div class="tab">30 days</div>
+        </div>
+        <div class="total-usage">Total Energy Usage</div>
+        <div class="usage-val">50 <span style="font-size: 14px; color: #8892B0;">Kwh</span></div>
+        
+        <div class="chart-wrapper">
+            <canvas id="barChart"></canvas>
+        </div>
+    </div>
+
+    <!-- แถวล่าง 3: สภาพอากาศขอนแก่น (API) -->
+    <div class="card weather-card">
+        <div class="w-header">
+            <div class="temp-display">
+                <div class="temp-val" id="api-temp">--</div>
+                <div class="temp-unit">°C</div>
+                <div style="margin-left: 15px; padding-top: 5px;">
+                    <div id="api-date" style="font-size: 12px; font-weight: 600;">Loading...</div>
+                    <div style="font-size: 12px; color: #8892B0;">Khon Kaen, Thailand</div>
+                </div>
+            </div>
+            <div style="text-align: right; font-size: 12px; font-weight: 600;">
+                <span id="api-desc">Loading...</span><br>
+                <span style="color: #FF7A00;" id="api-wind">🌬️ -- km/h</span>
+            </div>
+        </div>
+        <div class="w-tabs">
+            <div class="w-tab active">Temperature Forecast</div>
+        </div>
+        <div class="weather-chart-wrapper">
+            <canvas id="lineChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // 1. กราฟแท่ง (Statistic)
+    const ctxBar = document.getElementById('barChart').getContext('2d');
+    new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: ['04', '05', '06', '07', '08'],
+            datasets: [{
+                data: [3, 4.8, 1.5, 3.2, 4.1],
+                backgroundColor: ['#2A2D3A', '#FF7A00', '#2A2D3A', '#2A2D3A', '#2A2D3A'],
+                borderRadius: 8, barThickness: 30
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { display: false },
+                x: { grid: { display: false }, border: { display: false }, ticks: { color: '#8892B0', font: { weight: '600' } } }
+            }
+        }
+    });
+
+    // 2. กราฟเส้นสภาพอากาศ
+    const ctxLine = document.getElementById('lineChart').getContext('2d');
+    let gradient = ctxLine.createLinearGradient(0, 0, 0, 200);
+    gradient.addColorStop(0, 'rgba(255, 122, 0, 0.3)');
+    gradient.addColorStop(1, 'rgba(255, 122, 0, 0)');
+
+    window.weatherChart = new Chart(ctxLine, {
+        type: 'line',
+        data: {
+            labels: [], 
+            datasets: [{
+                data: [], 
+                borderColor: '#FF7A00', backgroundColor: gradient,
+                borderWidth: 3, fill: true, tension: 0.4, pointRadius: 3, pointBackgroundColor: '#FF7A00'
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { display: false, min: 20, max: 45 },
+                x: { grid: { display: false }, border: { display: false }, ticks: { color: '#8892B0', font: { size: 11 } } }
+            }
+        }
+    });
+
+    // 3. ดึง API สภาพอากาศ
+    async function fetchKhonKaenWeather() {
+        try {
+            const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+            document.getElementById('api-date').innerText = new Date().toLocaleDateString('en-US', options);
+
+            const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=16.4322&longitude=102.8236&current=temperature_2m,weather_code,wind_speed_10m&hourly=temperature_2m&timezone=Asia%2FBangkok');
+            const data = await res.json();
+
+            document.getElementById('api-temp').innerText = Math.round(data.current.temperature_2m);
+            document.getElementById('api-wind').innerText = `🌬️ ${data.current.wind_speed_10m} km/h`;
+            
+            let desc = "Clear";
+            if(data.current.weather_code > 0) desc = "Cloudy";
+            if(data.current.weather_code > 50) desc = "Rainy 🌧️";
+            document.getElementById('api-desc').innerText = desc;
+
+            const currentHourStr = data.current.time.substring(0, 13) + ":00";
+            let startIndex = data.hourly.time.findIndex(t => t === currentHourStr);
+            if(startIndex === -1) startIndex = 0;
+            
+            const chartLabels = [];
+            const chartData = [];
+            for(let i=0; i<7; i++) {
+                let timeString = data.hourly.time[startIndex + i].substring(11, 16); 
+                chartLabels.push(timeString);
+                chartData.push(data.hourly.temperature_2m[startIndex + i]);
+            }
+            
+            window.weatherChart.data.labels = chartLabels;
+            window.weatherChart.data.datasets[0].data = chartData;
+            window.weatherChart.update();
+
+        } catch (error) {
+            console.error("Error fetching weather:", error);
+            document.getElementById('api-temp').innerText = "Err";
+        }
+    }
+    fetchKhonKaenWeather(); 
+
+    // =======================================================
+    // 4. ระบบเชื่อมต่อ Firebase Realtime Database
+    // =======================================================
+    
+    // ❗️ กรุณานำ config จากโปรเจกต์ Firebase ของคุณมาใส่ตรงนี้
+    const firebaseConfig = {
+        apiKey: "AIzaSyC5TxaQPYWK8PLChQqO6OJtu-uFrMpnAHQ",
+        authDomain: "tuktuk-dashboard.firebaseapp.com",
+        databaseURL: "https://tuktuk-dashboard-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "tuktuk-dashboard",
+        storageBucket: "tuktuk-dashboard.firebasestorage.app",
+        messagingSenderId: "432003257268",
+        appId: "1:432003257268:web:bae6e945d4a051567f58e1"
+    };
+
+    // เริ่มต้น Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // ดักรอตรวจสอบสถานะการเชื่อมต่อ
+    const connectedRef = firebase.database().ref(".info/connected");
+    connectedRef.on("value", (snap) => {
+        const statusTag = document.getElementById("firebase-status");
+        if (snap.val() === true) {
+            statusTag.innerText = "Firebase Connected";
+            statusTag.style.background = "#00E676";
+        } else {
+            statusTag.innerText = "Firebase Offline";
+            statusTag.style.background = "#FF5252";
+        }
+    });
+
+    // ดึงข้อมูล Realtime จาก Path: "tuktuk/telemetry"
+    db.ref('tuktuk/telemetry').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if(!data) return;
+        
+        // อัปเดตความเร็ว & แบตเตอรี่
+        if(data.speed !== undefined) document.getElementById("speedVal").innerText = data.speed;
+        if(data.soc !== undefined) document.getElementById("socVal").innerText = data.soc + "%";
+
+        // อัปเดตโหมดขับขี่
+        if(data.mode !== undefined) {
+            const modeEl = document.getElementById("modeVal");
+            if(data.mode == 1) modeEl.innerText = "ECO";
+            else if(data.mode == 2) modeEl.innerText = "NORMAL";
+            else if(data.mode == 3) modeEl.innerText = "SPORT";
+        }
+
+        // อัปเดตสถานะเกียร์
+        if(data.gear !== undefined) {
+            const gears = ["R", "N", "D"];
+            gears.forEach(g => {
+                const el = document.getElementById("gear-" + g);
+                if(el) el.classList.remove("active");
+            });
+            const activeGear = document.getElementById("gear-" + data.gear);
+            if(activeGear) activeGear.classList.add("active");
+        }
+
+        // อัปเดตไฟแสดงสถานะ
+        const toggleLight = (id, condition, activeClass) => {
+            const el = document.getElementById(id);
+            if(el) {
+                if(condition) el.classList.add(activeClass);
+                else el.classList.remove(activeClass);
+            }
+        };
+
+        if(data.low_beam !== undefined) toggleLight("light-head", data.low_beam == 1, "active-green");
+        if(data.high_beam !== undefined) toggleLight("light-high", data.high_beam == 1, "active-blue");
+        if(data.turn_l !== undefined) toggleLight("light-turn-l", data.turn_l == 1, "active-orange");
+        if(data.turn_r !== undefined) toggleLight("light-turn-r", data.turn_r == 1, "active-orange");
+
+        // ✅ 1. รับค่าการชาร์จปัจจุบัน (kWh และ บาท)
+        if(data.charge_kwh !== undefined) document.getElementById("kwhVal").innerText = data.charge_kwh.toFixed(1);
+        if(data.charge_cost !== undefined) document.getElementById("costVal").innerText = "฿" + data.charge_cost.toFixed(2);
+
+        // ✅ 2. รับค่าประวัติการชาร์จ (History Array)
+        if(data.charge_history) {
+            const historyList = document.getElementById("historyList");
+            historyList.innerHTML = ""; // ล้างข้อความจำลองทิ้ง
+
+            // วนลูปเพื่อสร้างลิสต์ประวัติจากข้อมูลที่ ESP32 ส่งมา
+            data.charge_history.forEach(item => {
+                const hItem = document.createElement("div");
+                hItem.className = "h-item";
+                hItem.innerHTML = `
+                    <div>
+                        <div class="h-date">${item.date}</div>
+                        <div class="h-time">${item.time}</div>
+                    </div>
+                    <div class="h-power">⚡ ${item.power} kWh</div>
+                `;
+                historyList.appendChild(hItem);
+            });
+        }
+    });
+</script>
+</body>
+</html>
