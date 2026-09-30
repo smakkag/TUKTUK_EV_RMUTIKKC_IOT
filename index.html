@@ -181,7 +181,8 @@
             <div class="tab">30 days</div>
         </div>
         <div class="total-usage">Total Energy Usage</div>
-        <div class="usage-val">50 <span style="font-size: 14px; color: #8892B0;">Kwh</span></div>
+        <!-- ❗️ เพิ่ม id ตรงนี้เพื่อให้สคริปต์หาเจอ -->
+        <div class="usage-val" id="totalEnergyVal">0 <span style="font-size: 14px; color: #8892B0;">kWh</span></div>
         <div class="chart-wrapper"><canvas id="barChart"></canvas></div>
     </div>
 
@@ -229,17 +230,13 @@
     // =======================================================
     // 2. ระบบ Login / Logout
     // =======================================================
-    
-    // ตรวจสอบสถานะว่าล็อกอินอยู่หรือไม่
     auth.onAuthStateChanged((user) => {
         if (user) {
-            // ล็อกอินแล้ว -> ซ่อนหน้า Login โชว์ Dashboard
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('dashboard-container').style.display = 'grid';
             document.getElementById('logout-btn').style.display = 'block';
-            startFetchingData(); // เริ่มดึงข้อมูลจาก DB
+            startFetchingData(); 
         } else {
-            // ยังไม่ล็อกอิน -> โชว์หน้า Login ซ่อน Dashboard
             document.getElementById('login-screen').style.display = 'flex';
             document.getElementById('dashboard-container').style.display = 'none';
             document.getElementById('logout-btn').style.display = 'none';
@@ -248,23 +245,19 @@
         }
     });
 
-    // ฟังก์ชันปุ่ม Login
     function login() {
         const email = document.getElementById('emailInput').value;
         const password = document.getElementById('passwordInput').value;
         const errorText = document.getElementById('login-error');
-        
         auth.signInWithEmailAndPassword(email, password)
             .then(() => { errorText.style.display = 'none'; })
             .catch((error) => { errorText.style.display = 'block'; });
     }
 
-    // ฟังก์ชันปุ่ม Logout
     function logout() {
         auth.signOut();
     }
 
-    // กด Enter เพื่อล็อกอินได้
     document.getElementById('passwordInput').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') login();
     });
@@ -273,7 +266,8 @@
     // 3. กราฟและสภาพอากาศ
     // =======================================================
     const ctxBar = document.getElementById('barChart').getContext('2d');
-    new Chart(ctxBar, {
+    // ✅ เพิ่ม window.usageChart ตรงนี้เพื่อให้แก้ค่ากราฟแท่งได้
+    window.usageChart = new Chart(ctxBar, {
         type: 'bar', data: { labels: ['04', '05', '06', '07', '08'], datasets: [{ data: [3, 4.8, 1.5, 3.2, 4.1], backgroundColor: ['#2A2D3A', '#FF7A00', '#2A2D3A', '#2A2D3A', '#2A2D3A'], borderRadius: 8, barThickness: 30 }] },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, border: { display: false }, ticks: { color: '#8892B0', font: { weight: '600' } } } } }
     });
@@ -347,8 +341,31 @@
                     historyList.appendChild(hItem);
                 });
             }
+
+            // ✅ รับข้อมูลสถิติพลังงาน (Statistic)
+            if(data.energy_stats !== undefined) {
+                if(data.energy_stats.total !== undefined) {
+                    document.getElementById("totalEnergyVal").innerHTML = data.energy_stats.total + ' <span style="font-size: 14px; color: #8892B0;">kWh</span>';
+                }
+                
+                if(data.energy_stats.history && window.usageChart) {
+                    const labels = [];
+                    const chartData = [];
+                    
+                    data.energy_stats.history.forEach(item => {
+                        labels.push(item.time);
+                        chartData.push(item.kwh);
+                    });
+                    
+                    const maxVal = Math.max(...chartData);
+                    const bgColors = chartData.map(val => val === maxVal ? '#FF7A00' : '#2A2D3A');
+
+                    window.usageChart.data.labels = labels;
+                    window.usageChart.data.datasets[0].data = chartData;
+                    window.usageChart.data.datasets[0].backgroundColor = bgColors;
+                    window.usageChart.update();
+                }
+            }
         });
     }
 </script>
-</body>
-</html>
