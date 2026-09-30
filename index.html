@@ -102,6 +102,62 @@
         #firebase-status { position: fixed; top: 15px; right: 20px; font-size: 12px; background: #FF5252; color: white; padding: 6px 14px; border-radius: 20px; font-weight: 600; z-index: 100;}
         #logout-btn { position: fixed; top: 13px; right: 160px; font-size: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 6px 14px; border-radius: 20px; font-weight: 600; z-index: 100; cursor: pointer; display: none; transition: 0.2s;}
         #logout-btn:hover { background: rgba(255,255,255,0.2); }
+
+        /* =========================================
+           📱 โหมดมือถือ (Responsive Mobile-friendly)
+           ========================================= */
+        @media (max-width: 768px) {
+            /* 1. เปลี่ยน Grid ให้แสดงผลคอลัมน์เดียว และเรียงต่อกันเป็นแนวตั้ง */
+            #dashboard-container {
+                display: flex !important;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            /* 2. รีเซ็ตตำแหน่งของการ์ดทุกใบ */
+            .car-card, .charge-card, .stat-card, .weather-card {
+                grid-column: auto !important;
+                grid-row: auto !important;
+                padding: 15px; /* ลดขอบลงนิดหน่อยให้มีพื้นที่แสดงข้อมูลเพิ่ม */
+            }
+
+            /* 3. จัดระเบียบหน้าปัดรูปรถใหม่ ไม่ให้ซ้อนทับกัน */
+            .car-display-wrapper {
+                flex-direction: column; /* ให้ความเร็ว รูปรถ และไฟเลี้ยว เรียงจากบนลงล่าง */
+            }
+
+            /* ดึงความเร็วและโหมดรถมาไว้ตรงกลาง */
+            .hud-left {
+                position: relative;
+                left: auto;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+                margin-bottom: 20px;
+            }
+
+            /* ดึงปุ่มไฟเลี้ยวและไฟหน้ามาไว้ตรงกลาง */
+            .hud-right {
+                position: relative;
+                right: auto;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                gap: 15px;
+                margin-top: 20px;
+            }
+            .indicator-row { margin-top: 0 !important; }
+
+            /* ย่อขนาดรูปรถและตัวหนังสือลงนิดหน่อยให้พอดีจอมือถือ */
+            .tuktuk-img { transform: scale(1); max-width: 95%; }
+            .speed-val { font-size: 56px; }
+            .temp-val { font-size: 36px; }
+
+            /* เลื่อนปุ่ม Logout ลงมาไม่ให้ทับกับป้าย Firebase */
+            #logout-btn { top: 50px; right: 20px; }
+        }
+
     </style>
 </head>
 <body>
