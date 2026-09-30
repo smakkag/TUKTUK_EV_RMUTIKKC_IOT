@@ -177,8 +177,8 @@
     <div class="card stat-card">
         <div class="card-title">Statistic</div>
         <div class="tabs">
-            <div class="tab active">24 hours</div>
-            <div class="tab">30 days</div>
+            <div class="tab active" id="tab-24h" onclick="switchTab('24h')">24 hours</div>
+            <div class="tab" id="tab-30d" onclick="switchTab('30d')">30 days</div>
         </div>
         <div class="total-usage">Total Energy Usage</div>
         <!-- ❗️ เพิ่ม id ตรงนี้เพื่อให้สคริปต์หาเจอ -->
@@ -299,6 +299,46 @@
     }
     fetchKhonKaenWeather();
 
+    // ตัวแปรเก็บข้อมูลกราฟทั้ง 2 โหมด
+    let currentStatMode = '24h';
+    let statData = {
+        '24h': { labels: [], data: [] },
+        // ข้อมูลจำลองรายเดือน (เผื่อไว้ในกรณีที่ Firebase ยังไม่มีข้อมูลส่งมา)
+        '30d': { labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], data: [45.2, 52.1, 38.5, 60.0] } 
+    };
+
+    // ฟังก์ชันสลับปุ่ม Tab
+    function switchTab(mode) {
+        currentStatMode = mode;
+        
+        // เปลี่ยนสีปุ่มที่ถูกเลือก
+        document.getElementById('tab-24h').classList.remove('active');
+        document.getElementById('tab-30d').classList.remove('active');
+        document.getElementById('tab-' + mode).classList.add('active');
+        
+        // สั่งอัปเดตกราฟ
+        renderStatChart();
+    }
+
+    // ฟังก์ชันวาดกราฟใหม่
+    function renderStatChart() {
+        if (!window.usageChart) return;
+        
+        const labels = statData[currentStatMode].labels;
+        const chartData = statData[currentStatMode].data;
+        
+        if (chartData.length === 0) return;
+
+        // หาค่าสูงสุดเพื่อเปลี่ยนเป็นสีส้ม
+        const maxVal = Math.max(...chartData);
+        const bgColors = chartData.map(val => val === maxVal ? '#FF7A00' : '#2A2D3A');
+
+        window.usageChart.data.labels = labels;
+        window.usageChart.data.datasets[0].data = chartData;
+        window.usageChart.data.datasets[0].backgroundColor = bgColors;
+        window.usageChart.update();
+    }
+
     // =======================================================
     // 4. ดึงข้อมูล Firebase (เริ่มทำงานเมื่อล็อกอินผ่าน)
     // =======================================================
@@ -342,29 +382,25 @@
                 });
             }
 
-            // ✅ รับข้อมูลสถิติพลังงาน (Statistic)
+// ✅ รับข้อมูลสถิติพลังงาน (Statistic)
             if(data.energy_stats !== undefined) {
                 if(data.energy_stats.total !== undefined) {
                     document.getElementById("totalEnergyVal").innerHTML = data.energy_stats.total + ' <span style="font-size: 14px; color: #8892B0;">kWh</span>';
                 }
                 
-                if(data.energy_stats.history && window.usageChart) {
-                    const labels = [];
-                    const chartData = [];
-                    
+                // ดึงข้อมูล 24 ชั่วโมงจาก Firebase มาเก็บไว้ในตัวแปร
+                if(data.energy_stats.history) {
+                    const labels24 = [];
+                    const data24 = [];
                     data.energy_stats.history.forEach(item => {
-                        labels.push(item.time);
-                        chartData.push(item.kwh);
+                        labels24.push(item.time);
+                        data24.push(item.kwh);
                     });
-                    
-                    const maxVal = Math.max(...chartData);
-                    const bgColors = chartData.map(val => val === maxVal ? '#FF7A00' : '#2A2D3A');
-
-                    window.usageChart.data.labels = labels;
-                    window.usageChart.data.datasets[0].data = chartData;
-                    window.usageChart.data.datasets[0].backgroundColor = bgColors;
-                    window.usageChart.update();
+                    statData['24h'] = { labels: labels24, data: data24 };
                 }
+
+                // สั่งอัปเดตกราฟให้แสดงข้อมูลตาม Tab ที่กำลังเลือกอยู่ปัจจุบัน
+                renderStatChart();
             }
         });
     }
