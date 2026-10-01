@@ -152,6 +152,55 @@
         .w-tab.active { background: #FF7A00; color: white; padding: 4px 16px; border-radius: 20px; }
         .weather-chart-wrapper { flex: 1; position: relative; min-height: 180px; }
 
+        /* --- สไตล์สำหรับหน้า Info (หน้า 3) --- */
+        .info-layout {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .info-card-orange {
+            background: #0B0E14; /* สีพื้นหลังดำสนิทแบบในรูป */
+            border: 2px solid #FF7A00;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex; flex-direction: column;
+        }
+        .info-card-orange.full-width { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: center; padding: 30px 40px; }
+        .info-card-title {
+            color: #FFF; font-size: 20px; font-weight: 600;
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 20px; border-bottom: 1px solid rgba(255, 122, 0, 0.3); padding-bottom: 15px;
+        }
+        .info-row-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .info-label { color: #8892B0; font-size: 15px; display: flex; align-items: center; gap: 10px; }
+        .info-val { color: #FFF; font-size: 16px; font-weight: 500; }
+        
+        /* สไตล์พิเศษในแต่ละกล่อง */
+        .dev-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; text-align: center; margin-bottom: 15px; }
+        .dev-role { color: #8892B0; font-size: 12px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .dev-name { color: #FFF; font-size: 14px; font-weight: 600; }
+        .dev-footer { text-align: center; color: #8892B0; font-size: 13px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 15px; margin-top: auto; }
+        
+        .quick-link-btn {
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            border: 1px solid #FF7A00; border-radius: 20px; padding: 10px;
+            color: #FFF; text-decoration: none; margin-bottom: 12px; cursor: pointer; transition: 0.2s;
+        }
+        .quick-link-btn:hover { background: rgba(255, 122, 0, 0.2); }
+        
+        .status-badge {
+            background: rgba(0, 230, 118, 0.1); border: 1px solid #00E676; color: #00E676;
+            padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .status-dot { width: 8px; height: 8px; background: #00E676; border-radius: 50%; box-shadow: 0 0 8px #00E676; }
+        
+        @media (max-width: 768px) {
+            .info-layout { grid-template-columns: 1fr; }
+            .info-card-orange.full-width { flex-direction: column; }
+            .info-card-orange.full-width img { margin-top: 20px; max-width: 100%; }
+        }
+
         /* =========================================
            📱 โหมดมือถือ (Responsive Mobile-friendly)
            ========================================= */
@@ -300,9 +349,80 @@
 
     <!-- 🟢 หน้าที่ 3: Info สเปครถ -->
     <div id="page-info" class="page-view" style="display: none;">
-        <h2 style="margin-bottom: 20px;">Vehicle Information</h2>
-        <div class="card">
-            <p style="color: #8892B0;">เตรียมพื้นที่สำหรับใส่ข้อมูลสเปครถยนต์ตรงนี้ครับ...</p>
+        <div class="info-layout">
+            
+            <!-- บล็อกบนสุด: Vehicle Information (ขยายเต็ม) -->
+            <div class="info-card-orange full-width">
+                <div style="flex: 1; min-width: 250px;">
+                    <div class="info-card-title">🚐 Vehicle information</div>
+                    <div class="info-row-item">
+                        <span class="info-label">🚐 Vehicle Type</span><span class="info-val">Electric TUKTUK</span>
+                    </div>
+                    <div class="info-row-item">
+                        <span class="info-label">⚡ Battery Pack</span><span class="info-val">24 S(72V)</span>
+                    </div>
+                    <div class="info-row-item">
+                        <span class="info-label">💨 Motor Power</span><span class="info-val">6000 W</span>
+                    </div>
+                    <div class="info-row-item">
+                        <span class="info-label">🎛️ Controller</span><span class="info-val">105 A</span>
+                    </div>
+                </div>
+                <!-- รูปรถตุ๊กตุ๊ก -->
+                <div style="flex: 1; text-align: center;">
+                    <img src="tuktuk.png" alt="EV Tuk-Tuk" style="max-height: 220px; filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));" onerror="this.style.display='none'">
+                </div>
+            </div>
+
+            <!-- บล็อกล่าง 1: Developer -->
+            <div class="info-card-orange">
+                <div class="info-card-title">👨‍💻 Developer</div>
+                <div class="dev-grid">
+                    <div>
+                        <div class="dev-role">🔧 Builder</div>
+                        <div class="dev-name">Jakawut</div>
+                    </div>
+                    <div style="border-left: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1);">
+                        <div class="dev-role">💻 Dev</div>
+                        <div class="dev-name">Pronpavit</div>
+                    </div>
+                    <div>
+                        <div class="dev-role">🎓 Advisor</div>
+                        <div class="dev-name">Boonkit</div>
+                    </div>
+                </div>
+                <div class="dev-footer">© RMUTI Khon Kaen Campus</div>
+            </div>
+
+            <!-- บล็อกล่าง 2: Quick Link -->
+            <div class="info-card-orange">
+                <div class="info-card-title">🔗 Quick Link</div>
+                <div class="quick-link-btn">🌐 Website</div>
+                <div class="quick-link-btn">📖 Manual</div>
+                <div class="quick-link-btn">🔄 Check update</div>
+            </div>
+
+            <!-- บล็อกล่าง 3: System Status -->
+            <div class="info-card-orange">
+                <div class="info-card-title">🛡️ System Status</div>
+                <div class="info-row-item">
+                    <span class="info-label">📶 Wifi</span>
+                    <span class="status-badge"><span class="status-dot"></span> online</span>
+                </div>
+                <div class="info-row-item">
+                    <span class="info-label">☁️️ MQTT</span>
+                    <span class="status-badge"><span class="status-dot"></span> online</span>
+                </div>
+                <div class="info-row-item">
+                    <span class="info-label">💻 Display</span>
+                    <span class="status-badge"><span class="status-dot"></span> normal</span>
+                </div>
+                <div class="info-row-item">
+                    <span class="info-label">🌡️ Temp</span>
+                    <span class="status-badge"><span class="status-dot"></span> normal</span>
+                </div>
+            </div>
+
         </div>
     </div>
 
