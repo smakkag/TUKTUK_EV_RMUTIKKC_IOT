@@ -201,6 +201,164 @@
             .info-card-orange.full-width img { margin-top: 20px; max-width: 100%; }
         }
 
+    /* =========================================
+           สไตล์สำหรับหน้า Battery (BMS)
+           ========================================= */
+        .batt-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; }
+        .batt-title h2 { font-size: 24px; font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+        .batt-status-badge { background: rgba(0, 230, 118, 0.15); color: #00E676; padding: 4px 10px; border-radius: 12px; font-size: 13px; font-weight: 600; }
+        .batt-subtitle { color: #8892B0; font-size: 14px; }
+        .batt-update-time { font-size: 12px; color: #8892B0; display: flex; align-items: center; gap: 5px; }
+
+        /* แถวบน: 6 กล่องสรุป */
+        .batt-top-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; margin-bottom: 15px; }
+        .b-card { background: #1C1F26; border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 16px; position: relative; }
+        .b-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        .b-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 18px; }
+        .b-title { font-size: 12px; font-weight: 600; color: #8892B0; }
+        .b-title span { display: block; font-size: 11px; font-weight: 400; color: #555A6E; }
+        .b-value { font-size: 24px; font-weight: 700; color: #FFF; margin-bottom: 5px; }
+        .b-sub { font-size: 11px; color: #8892B0; }
+        .progress-bg { background: #2A2D3A; height: 6px; border-radius: 3px; width: 100%; margin-top: 10px; overflow: hidden; }
+        .progress-fill { background: #00E676; height: 100%; border-radius: 3px; }
+
+        /* แถวกลาง: กราฟ + สรุป + สถานะ */
+        .batt-mid-grid { display: grid; grid-template-columns: 2fr 1.3fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .b-section-title { font-size: 14px; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; color: #FFF; }
+        
+        /* สรุปข้อมูลแบตเตอรี่ (ตรงกลาง) */
+        .b-summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .b-sum-item { display: flex; align-items: center; gap: 12px; }
+        .b-sum-icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.05); display: flex; justify-content: center; align-items: center; font-size: 14px; }
+        .b-sum-text .lbl { font-size: 11px; color: #8892B0; }
+        .b-sum-text .val { font-size: 14px; font-weight: 600; color: #FFF; }
+
+        /* สถานะบาลานซ์เซลล์ (ขวา) */
+        .balance-bars { display: flex; gap: 2px; margin-bottom: 20px; }
+        .bal-bar { flex: 1; height: 20px; background: #00E676; border-radius: 2px; opacity: 0.8; }
+        
+        /* แถวล่าง: แรงดันเซลล์ 24 ช่อง */
+        .cell-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+        .cell-box { background: #12141A; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .cell-box:hover { border-color: rgba(255,255,255,0.2); }
+        .cell-name { font-size: 11px; color: #8892B0; margin-bottom: 4px; }
+        .cell-volt { font-size: 15px; font-weight: 600; color: #00E676; }
+        .cell-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .cell-dot.green { background: #00E676; box-shadow: 0 0 8px rgba(0, 230, 118, 0.5); }
+        .cell-dot.orange { background: #FF7A00; box-shadow: 0 0 8px rgba(255, 122, 0, 0.5); }
+
+        /* สีไอคอนต่างๆ */
+        .c-green { background: rgba(0, 230, 118, 0.1); color: #00E676; }
+        .c-blue { background: rgba(0, 210, 255, 0.1); color: #00D2FF; }
+        .c-orange { background: rgba(255, 122, 0, 0.1); color: #FF7A00; }
+        .c-purple { background: rgba(179, 136, 255, 0.1); color: #B388FF; }
+
+        @media (max-width: 1200px) {
+            .batt-top-grid { grid-template-columns: repeat(3, 1fr); }
+            .batt-mid-grid { grid-template-columns: 1fr; }
+            .cell-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .batt-top-grid { grid-template-columns: repeat(2, 1fr); }
+            .cell-grid { grid-template-columns: repeat(2, 1fr); }
+            .batt-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+        }
+
+        /* =========================================
+           สไตล์สำหรับหน้า Device Temperatures
+           ========================================= */
+        .temp-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; }
+        .temp-title h2 { font-size: 24px; font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+        .temp-subtitle { color: #8892B0; font-size: 14px; }
+        
+        /* แถวบน: การ์ดอุณหภูมิ 7 ใบ */
+        .temp-top-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; margin-bottom: 15px; }
+        .t-card { background: #1C1F26; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; }
+        .t-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+        .t-icon-title { display: flex; align-items: center; gap: 8px; }
+        .t-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 16px; }
+        .t-title-text { display: flex; flex-direction: column; }
+        .t-title { font-size: 12px; font-weight: 700; color: #FFF; white-space: nowrap; }
+        .t-sub { font-size: 10px; color: #8892B0; }
+        .t-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 4px; }
+        .t-val { font-size: 24px; font-weight: 700; color: #FFF; text-align: center; margin: 10px 0 5px; }
+        .t-status { font-size: 11px; text-align: center; margin-bottom: 15px; }
+        
+        /* สีต่างๆ ของการ์ด */
+        .tc-grn { color: #00E676; } .tc-blue { color: #00D2FF; } .tc-org { color: #FF7A00; } .tc-purp { color: #B388FF; }
+        .bg-grn { background: rgba(0, 230, 118, 0.1); } .bg-blue { background: rgba(0, 210, 255, 0.1); }
+        .bg-org { background: rgba(255, 122, 0, 0.1); } .bg-purp { background: rgba(179, 136, 255, 0.1); }
+        
+        /* แถวล่าง: กราฟ + ภาพรวม + รายละเอียด */
+        .temp-mid-grid { display: grid; grid-template-columns: 2fr 1.2fr 1fr; gap: 15px; }
+        .t-section-title { font-size: 15px; font-weight: 600; color: #FFF; display: flex; align-items: center; gap: 8px; margin-bottom: 15px; }
+        
+        /* เลเจนด์กราฟทำเอง */
+        .custom-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 15px; padding: 0 10px; }
+        .lg-item { font-size: 11px; color: #8892B0; display: flex; align-items: center; gap: 5px; }
+        .lg-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+        /* ภาพรวมระบบ (Schematic Box) */
+        .schematic-box { position: relative; width: 100%; height: 320px; background: #12141A; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        /* ❗️ ขยายรูปไดอะแกรมให้ใหญ่ขึ้น จะได้สมดุลกับป้าย */
+        .schematic-box img { width: 95% !important; opacity: 0.4 !important; }
+        /* ❗️ ปรับขนาดกรอบให้เล็กลงแบบระบุขนาดเป๊ะๆ */
+        .sch-label { 
+            position: absolute; 
+            background: rgba(11, 14, 20, 0.85); 
+            border: 1px solid; 
+            border-radius: 6px; 
+            
+            /* 1. กำหนดความกว้างและความสูงของกรอบตรงนี้เลยครับ */
+            width: 40px;    /* 👈 ลองลด/เพิ่ม ความกว้างตรงนี้ (เช่น 50px, 60px) */
+            height: 22px;   /* 👈 ลองลด/เพิ่ม ความสูงตรงนี้ (เช่น 28px, 35px) */
+            padding: 0;     /* เอา padding ออก เพื่อให้กรอบไม่ขยายบวม */
+            
+            /* จัดตัวหนังสือให้อยู่กึ่งกลางกรอบเป๊ะๆ */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 9px; /* ขนาดชื่ออุปกรณ์ (T1, Controller ฯลฯ) */
+            font-weight: 600; 
+            backdrop-filter: blur(4px); 
+            z-index: 2; 
+            white-space: nowrap; 
+        }
+        
+        .sch-val { 
+            display: block; 
+            font-size: 11px; /* ขนาดตัวเลขอุณหภูมิ */
+            font-weight: 700; 
+            color: #FFF; 
+            margin-top: 1px; 
+        }
+
+        /* ลิสต์รายละเอียดอุณหภูมิ */
+        .t-list { display: flex; flex-direction: column; gap: 0; }
+        .t-list-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .t-list-item:last-child { border-bottom: none; }
+        .t-list-left { display: flex; gap: 12px; align-items: center; }
+        .t-list-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 16px; }
+        .t-list-text .tit { font-size: 12px; font-weight: 600; color: #FFF; }
+        .t-list-text .sub { font-size: 11px; color: #8892B0; }
+        .t-list-right { text-align: right; }
+        .t-list-val { font-size: 14px; font-weight: 700; color: #FFF; margin-bottom: 2px; }
+        .t-list-stat { font-size: 11px; display: flex; align-items: center; gap: 5px; justify-content: flex-end; }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .temp-top-grid { grid-template-columns: repeat(4, 1fr); }
+            .temp-mid-grid { grid-template-columns: 1fr 1fr; }
+            .temp-mid-grid > div:last-child { grid-column: 1 / -1; }
+        }
+        @media (max-width: 768px) {
+            .temp-top-grid { grid-template-columns: repeat(2, 1fr); }
+            .temp-mid-grid { grid-template-columns: 1fr; }
+            .temp-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+        }
+
         /* =========================================
            📱 โหมดมือถือ (Responsive Mobile-friendly)
            ========================================= */
@@ -341,10 +499,115 @@
 
     <!-- 🟢 หน้าที่ 2: Battery -->
     <div id="page-battery" class="page-view" style="display: none;">
-        <h2 style="margin-bottom: 20px;">Battery Information</h2>
-        <div class="card">
-            <p style="color: #8892B0;">เตรียมพื้นที่ไว้ให้คุณออกแบบหน้าข้อมูลแบตเตอรี่แบบละเอียดตรงนี้ครับ...</p>
+        
+        <div class="batt-header">
+            <div class="batt-title">
+                <h2>ข้อมูลแบตเตอรี่ <span class="batt-status-badge">● ออนไลน์</span></h2>
+                <div class="batt-subtitle">ดูข้อมูลเชิงลึกระดับเซลล์แบบเรียลไทม์</div>
+            </div>
+            <div class="batt-update-time">🔄 อัปเดตล่าสุด: <span id="battUpdateTime">กำลังโหลด...</span></div>
         </div>
+
+        <!-- แถว 1: 6 กล่องสรุป -->
+        <div class="batt-top-grid">
+            <div class="b-card">
+                <div class="b-card-header"><div class="b-icon c-green">🔋</div><div class="b-title">SOC <span>(State of Charge)</span></div></div>
+                <div class="b-value" id="b-soc">78.5%</div>
+                <div class="progress-bg"><div class="progress-fill" style="width: 78.5%;"></div></div>
+            </div>
+            <div class="b-card">
+                <div class="b-card-header"><div class="b-icon c-blue">⚡</div><div class="b-title">แรงดันรวม <span>(Pack Voltage)</span></div></div>
+                <div class="b-value" id="b-volt">79.24 V</div>
+                <div class="b-sub">ช่วง 72.0 - 84.0 V</div>
+            </div>
+            <div class="b-card">
+                <div class="b-card-header"><div class="b-icon c-orange">🔌</div><div class="b-title">กระแสไฟฟ้า <span>(Current)</span></div></div>
+                <div class="b-value" style="color: #00E676;" id="b-curr">-12.8 A</div>
+                <div class="b-sub">(กำลังชาร์จ/คายประจุ)</div>
+            </div>
+            <div class="b-card">
+                <div class="b-card-header"><div class="b-icon c-purple">🌡️</div><div class="b-title">อุณหภูมิ (สูงสุด) <span>(Max Temp)</span></div></div>
+                <div class="b-value" id="b-temp">32.7 °C</div>
+                <div class="b-sub">ช่วง 24.1 - 34.8 °C</div>
+            </div>
+            <div class="b-card">
+                <div class="b-card-header"><div class="b-icon c-blue">🪫</div><div class="b-title">ความจุคงเหลือ <span>(Remaining Capacity)</span></div></div>
+                <div class="b-value" id="b-cap">78.3 Ah</div>
+                <div class="b-sub">จาก 100.0 Ah</div>
+                <div class="progress-bg" style="margin-top:5px;"><div class="progress-fill" style="background:#00D2FF; width: 78.3%;"></div></div>
+            </div>
+            <div class="b-card">
+                <div class="b-card-header"><div class="b-icon c-orange">⚖️</div><div class="b-title">ต่างศักย์เซลล์ <span>(Delta V)</span></div></div>
+                <div class="b-value" id="b-delta">0.087 V</div>
+                <div class="b-sub">(ต่ำที่สุด <span style="color:#FF7A00">0.002 V</span> - สูงสุด 0.089 V)</div>
+            </div>
+        </div>
+
+        <!-- แถว 2: กราฟ + สรุป + สถานะ -->
+        <div class="batt-mid-grid">
+            <!-- กล่องกราฟ -->
+            <div class="b-card" style="display: flex; flex-direction: column;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <div class="b-section-title" style="margin:0;">📈 กราฟแรงดันรวม / กระแส / SOC</div>
+                    <div class="tabs" style="margin:0;">
+                        <div class="tab">1 ชม.</div><div class="tab active">6 ชม.</div><div class="tab">24 ชม.</div><div class="tab">7 วัน</div>
+                    </div>
+                </div>
+                <div style="flex:1; position: relative; min-height: 200px;"><canvas id="battDetailChart"></canvas></div>
+            </div>
+
+            <!-- กล่องสรุป -->
+            <div class="b-card">
+                <div class="b-section-title">📋 สรุปข้อมูลแบตเตอรี่</div>
+                <div class="b-summary-grid">
+                    <div class="b-sum-item"><div class="b-sum-icon c-green">📦</div><div class="b-sum-text"><div class="lbl">จำนวนเซลล์</div><div class="val">24 เซลล์</div></div></div>
+                    <div class="b-sum-item"><div class="b-sum-icon c-green">🔋</div><div class="b-sum-text"><div class="lbl">แรงดันเซลล์ต่ำสุด</div><div class="val">3.221 V</div></div></div>
+                    <div class="b-sum-item"><div class="b-sum-icon c-blue">🧠</div><div class="b-sum-text"><div class="lbl">จำนวน BMS</div><div class="val">BMS 1 ตัว</div></div></div>
+                    <div class="b-sum-item"><div class="b-sum-icon c-green">🔋</div><div class="b-sum-text"><div class="lbl">แรงดันเซลล์สูงสุด</div><div class="val">3.342 V</div></div></div>
+                    <div class="b-sum-item"><div class="b-sum-icon c-blue">⚡</div><div class="b-sum-text"><div class="lbl">แรงดันรวม</div><div class="val">79.24 V</div></div></div>
+                    <div class="b-sum-item"><div class="b-sum-icon c-orange">⚖️</div><div class="b-sum-text"><div class="lbl">ต่างศักย์เซลล์</div><div class="val">0.087 V</div></div></div>
+                    <div class="b-sum-item"><div class="b-sum-icon c-orange">🔌</div><div class="b-sum-text"><div class="lbl">กระแสไฟฟ้า</div><div class="val" style="color:#00E676;">-12.8 A</div></div></div>
+                    <div class="b-sum-item"><div class="b-sum-icon c-purple">🌡️</div><div class="b-sum-text"><div class="lbl">อุณหภูมิแบตเตอรี่</div><div class="val">32.7 °C</div></div></div>
+                </div>
+            </div>
+
+            <!-- กล่องสถานะ -->
+            <div class="b-card" style="display: flex; flex-direction: column; gap: 15px;">
+                <div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div class="b-section-title">⚖️ สถานะการบาลานซ์เซลล์</div>
+                        <div class="batt-status-badge">ทำงานปกติ</div>
+                    </div>
+                    <div class="balance-bars" id="balance-bars-container">
+                        <!-- สร้างผ่าน JS เพื่อประหยัดบรรทัด -->
+                    </div>
+                    <div style="font-size: 11px; color: #8892B0;">เซลล์ที่กำลังบาลานซ์: 24 / 24</div>
+                </div>
+                <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
+                    <div class="b-section-title">💼 BMS / Battery Pack</div>
+                    <div class="b-sum-item" style="margin-bottom: 10px;"><div class="b-sum-icon c-green" style="border-radius:50%; width:10px; height:10px; padding:0;"></div><div class="b-sum-text"><div class="val">BMS 1 ตัว <span style="color:#00E676; font-size: 12px; font-weight:normal;">(Online)</span></div></div></div>
+                    <div class="b-sum-item" style="margin-bottom: 10px;"><div class="b-sum-icon c-purple" style="background:transparent;">🌡️</div><div class="b-sum-text"><div class="lbl">อุณหภูมิ BMS</div><div class="val">32.4 °C</div></div></div>
+                    <div class="b-sum-item"><div class="b-sum-icon c-green" style="background:transparent;">✅</div><div class="b-sum-text"><div class="lbl">สถานะการทำงาน</div><div class="val" style="color:#00E676;">ปกติ</div></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- แถว 3: แรงดันเซลล์ -->
+        <div class="b-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div class="b-section-title" style="margin:0;">🔋 แรงดันไฟฟ้าแต่ละเซลล์ (Cell Voltage)</div>
+                <div style="display: flex; gap: 15px; font-size: 12px; color: #8892B0;">
+                    <div style="display: flex; align-items: center; gap: 5px;"><div class="cell-dot green"></div> ปกติ (3.20 - 3.35 V)</div>
+                    <div style="display: flex; align-items: center; gap: 5px;"><div class="cell-dot orange" style="background:#FFC107; box-shadow:0 0 8px #FFC107;"></div> ต่ำ (≤ 3.15 V)</div>
+                    <div style="display: flex; align-items: center; gap: 5px;"><div class="cell-dot orange"></div> สูง (≥ 3.35 V)</div>
+                </div>
+            </div>
+            
+            <div class="cell-grid" id="cell-grid-container">
+                <!-- ข้อมูล 24 เซลล์จะถูกสร้างด้วย JavaScript -->
+            </div>
+        </div>
+
     </div>
 
     <!-- 🟢 หน้าที่ 3: Info สเปครถ -->
@@ -426,11 +689,114 @@
         </div>
     </div>
 
-    <!-- 🟢 หน้าที่ 4: อุณหภูมิ -->
+    <!-- 🟢 หน้าที่ 4: อุณหภูมิอุปกรณ์ -->
     <div id="page-temp" class="page-view" style="display: none;">
-        <h2 style="margin-bottom: 20px;">Device Temperatures</h2>
-        <div class="card">
-            <p style="color: #8892B0;">เตรียมพื้นที่สำหรับแสดงอุณหภูมิมอเตอร์ แบตเตอรี่ อินเวอร์เตอร์ ฯลฯ</p>
+        
+        <div class="temp-header">
+            <div class="temp-title">
+                <h2>🌡️ Device Temperatures</h2>
+                <div class="temp-subtitle">อุณหภูมิอุปกรณ์ทั้งหมดภายในระบบ</div>
+            </div>
+            <div class="batt-update-time">🔄 อัปเดตล่าสุด: <span id="tempUpdateTime">กำลังโหลด...</span></div>
+        </div>
+
+        <!-- แถวบน: การ์ด 7 ใบ -->
+        <div class="temp-top-grid">
+            <!-- T1 -->
+            <div class="t-card">
+                <div class="t-card-top"><div class="t-icon-title"><div class="t-icon bg-grn tc-grn">🔋</div><div class="t-title-text"><span class="t-title">แบตเตอรี่ (จุด 1)</span><span class="t-sub">Cell Temp (T1)</span></div></div><div class="t-dot bg-grn tc-grn" style="background:#00E676;"></div></div>
+                <div class="t-val" id="val-t1">32.7 °C</div><div class="t-status tc-grn">ปกติ (≤ 45°C)</div>
+                <div class="progress-bg"><div class="progress-fill" style="width: 45%; background:#00E676;"></div></div>
+            </div>
+            <!-- T2 -->
+            <div class="t-card">
+                <div class="t-card-top"><div class="t-icon-title"><div class="t-icon bg-grn tc-grn">🔋</div><div class="t-title-text"><span class="t-title">แบตเตอรี่ (จุด 2)</span><span class="t-sub">Cell Temp (T2)</span></div></div><div class="t-dot bg-grn tc-grn" style="background:#00E676;"></div></div>
+                <div class="t-val" id="val-t2">33.2 °C</div><div class="t-status tc-grn">ปกติ (≤ 45°C)</div>
+                <div class="progress-bg"><div class="progress-fill" style="width: 48%; background:#00E676;"></div></div>
+            </div>
+            <!-- T3 -->
+            <div class="t-card">
+                <div class="t-card-top"><div class="t-icon-title"><div class="t-icon bg-grn tc-grn">🔋</div><div class="t-title-text"><span class="t-title">แบตเตอรี่ (จุด 3)</span><span class="t-sub">Cell Temp (T3)</span></div></div><div class="t-dot bg-grn tc-grn" style="background:#00E676;"></div></div>
+                <div class="t-val" id="val-t3">33.5 °C</div><div class="t-status tc-grn">ปกติ (≤ 45°C)</div>
+                <div class="progress-bg"><div class="progress-fill" style="width: 50%; background:#00E676;"></div></div>
+            </div>
+            <!-- T4 -->
+            <div class="t-card">
+                <div class="t-card-top"><div class="t-icon-title"><div class="t-icon bg-grn tc-grn">🔋</div><div class="t-title-text"><span class="t-title">แบตเตอรี่ (จุด 4)</span><span class="t-sub">Cell Temp (T4)</span></div></div><div class="t-dot bg-grn tc-grn" style="background:#00E676;"></div></div>
+                <div class="t-val" id="val-t4">32.9 °C</div><div class="t-status tc-grn">ปกติ (≤ 45°C)</div>
+                <div class="progress-bg"><div class="progress-fill" style="width: 46%; background:#00E676;"></div></div>
+            </div>
+            <!-- BMS -->
+            <div class="t-card">
+                <div class="t-card-top"><div class="t-icon-title"><div class="t-icon bg-blue tc-blue">🧠</div><div class="t-title-text"><span class="t-title">อุณหภูมิ MOS (BMS)</span><span class="t-sub">BMS Temp</span></div></div><div class="t-dot bg-blue" style="background:#00D2FF;"></div></div>
+                <div class="t-val" id="val-bms">34.2 °C</div><div class="t-status tc-blue">ปกติ (≤ 60°C)</div>
+                <div class="progress-bg"><div class="progress-fill" style="width: 35%; background:#00D2FF;"></div></div>
+            </div>
+            <!-- Controller -->
+            <div class="t-card">
+                <div class="t-card-top"><div class="t-icon-title"><div class="t-icon bg-org tc-org">🎛️</div><div class="t-title-text"><span class="t-title">อุณหภูมิคอนโทรลเลอร์</span><span class="t-sub">Controller Temp</span></div></div><div class="t-dot bg-org" style="background:#FF7A00;"></div></div>
+                <div class="t-val" id="val-ctrl">41.7 °C</div><div class="t-status tc-org">ปกติ (≤ 80°C)</div>
+                <div class="progress-bg"><div class="progress-fill" style="width: 55%; background:#FF7A00;"></div></div>
+            </div>
+            <!-- Motor -->
+            <div class="t-card">
+                <div class="t-card-top"><div class="t-icon-title"><div class="t-icon bg-purp tc-purp">⚙️</div><div class="t-title-text"><span class="t-title">อุณหภูมิมอเตอร์</span><span class="t-sub">Motor Temp</span></div></div><div class="t-dot bg-purp" style="background:#B388FF;"></div></div>
+                <div class="t-val" id="val-motor">38.6 °C</div><div class="t-status tc-purp">ปกติ (≤ 100°C)</div>
+                <div class="progress-bg"><div class="progress-fill" style="width: 38%; background:#B388FF;"></div></div>
+            </div>
+        </div>
+
+        <!-- แถวล่าง: กราฟ + ภาพรวม + รายละเอียด -->
+        <div class="temp-mid-grid">
+            
+            <!-- 1. กราฟอุณหภูมิ -->
+            <div class="card" style="display: flex; flex-direction: column;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <div class="t-section-title" style="margin:0;">📈 กราฟอุณหภูมิย้อนหลัง</div>
+                    <div class="tabs" style="margin:0;"><div class="tab">1 ชม.</div><div class="tab active">6 ชม.</div><div class="tab">24 ชม.</div></div>
+                </div>
+                <div class="custom-legend">
+                    <span class="lg-item"><span class="lg-dot" style="background:#00E676;"></span> แบตฯ (จุด1)</span>
+                    <span class="lg-item"><span class="lg-dot" style="background:#00BFA5;"></span> แบตฯ (จุด2)</span>
+                    <span class="lg-item"><span class="lg-dot" style="background:#00C853;"></span> แบตฯ (จุด3)</span>
+                    <span class="lg-item"><span class="lg-dot" style="background:#64DD17;"></span> แบตฯ (จุด4)</span>
+                    <span class="lg-item"><span class="lg-dot" style="background:#00D2FF;"></span> BMS</span>
+                    <span class="lg-item"><span class="lg-dot" style="background:#FF7A00;"></span> Controller</span>
+                    <span class="lg-item"><span class="lg-dot" style="background:#B388FF;"></span> Motor</span>
+                </div>
+                <div style="flex:1; position: relative; min-height: 250px;"><canvas id="multiTempChart"></canvas></div>
+            </div>
+
+            <!-- 2. ภาพรวมอุณหภูมิในระบบ -->
+            <div class="card" style="display: flex; flex-direction: column;">
+                <div class="t-section-title">🖼️ ภาพรวมอุณหภูมิในระบบ</div>
+                <div class="schematic-box">
+                    <!-- หากคุณมีรูปโมเดลระบบ 3D นำมาใส่ตรง img นี้ได้เลยครับ -->
+                    <img src="system-schematic.png" style="width: 80%; opacity: 0.3;" alt="Schematic" onerror="this.style.display='none'">
+                    
+                    <!-- ป้ายแท็กตำแหน่งต่างๆ (ใช้ CSS จัดให้อยู่ตำแหน่งเหมือนในภาพ) -->
+                    <div class="sch-label tc-org" style="top: 20%; left: 10%; border-color:#FF7A00;">Controller<span class="sch-val">41.7°C</span></div>
+                    <div class="sch-label tc-purp" style="top: 20%; right: 10%; border-color:#B388FF;">Motor<span class="sch-val">38.6°C</span></div>
+                    <div class="sch-label tc-blue" style="bottom: 45%; right: 15%; border-color:#00D2FF;">BMS<span class="sch-val">34.2°C</span></div>
+                    
+                    <!-- แท็กแบตเตอรี่ 4 จุด เรียงด้านล่าง -->
+                    <div style="position: absolute; bottom: 19%; left: 0; width: 100%; display: flex; justify-content: center; gap: 5px; padding: 0 10px; box-sizing: border-box;">
+                        <div class="sch-label tc-grn" style="position:relative; border-color:#00E676;">T1<span class="sch-val">32.7°C</span></div>
+                        <div class="sch-label tc-grn" style="position:relative; border-color:#00E676;">T2<span class="sch-val">33.2°C</span></div>
+                        <div class="sch-label tc-grn" style="position:relative; border-color:#00E676;">T3<span class="sch-val">33.5°C</span></div>
+                        <div class="sch-label tc-grn" style="position:relative; border-color:#00E676;">T4<span class="sch-val">32.9°C</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. รายละเอียดอุณหภูมิ -->
+            <div class="card">
+                <div class="t-section-title">📋 รายละเอียดอุณหภูมิ</div>
+                <div class="t-list" id="temp-list-container">
+                    <!-- จะถูก Gen ด้วย JS เพื่อความสั้นของโค้ด -->
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -585,6 +951,122 @@
         window.usageChart.data.datasets[0].backgroundColor = bgColors;
         window.usageChart.update();
     }
+
+    // =======================================================
+    // ส่วนเสริมสำหรับหน้า Battery (BMS)
+    // =======================================================
+    // 1. อัปเดตเวลา
+    const now = new Date();
+    document.getElementById('battUpdateTime').innerText = `${now.getDate()} ก.ย. ${now.getFullYear()+543} ${now.getHours()}:${now.getMinutes()}`;
+
+    // 2. สร้างบาร์บาลานซ์ 24 ช่อง
+    let balHTML = '';
+    for(let i=0; i<24; i++) balHTML += '<div class="bal-bar"></div>';
+    document.getElementById('balance-bars-container').innerHTML = balHTML;
+
+    // 3. สร้างตาราง Cell Voltage 24 เซลล์จำลอง
+    let cellsHTML = '';
+    for(let i=1; i<=24; i++) {
+        let cellNum = i < 10 ? '0'+i : i;
+        let isAnomal = (i === 11); // สมมติให้เซลล์ 11 มีค่าโดด
+        let voltage = isAnomal ? '3.318' : (3.320 + Math.random()*0.015).toFixed(3);
+        let colorClass = isAnomal ? 'orange' : 'green';
+        let voltColor = isAnomal ? '#FF7A00' : '#00E676';
+        
+        cellsHTML += `
+        <div class="cell-box">
+            <div>
+                <div class="cell-name">Cell ${cellNum}</div>
+                <div class="cell-volt" style="color: ${voltColor};">${voltage} V</div>
+            </div>
+            <div class="cell-dot ${colorClass}"></div>
+        </div>`;
+    }
+    document.getElementById('cell-grid-container').innerHTML = cellsHTML;
+
+    // 4. สร้างกราฟแบตเตอรี่ (3 เส้น: แรงดัน, กระแส, SOC)
+    const ctxBatt = document.getElementById('battDetailChart').getContext('2d');
+    new Chart(ctxBatt, {
+        type: 'line',
+        data: { 
+            labels: ['10:00','11:00','12:00','13:00','14:00','15:00'], 
+            datasets: [
+                { label: 'แรงดัน (V)', data: [80,80,80.2,80.1,80.3,80.1], borderColor: '#00D2FF', backgroundColor: 'transparent', pointRadius: 2, yAxisID: 'y' },
+                { label: 'กระแส (A)', data: [10,12,11,15,10,8], borderColor: '#00E676', backgroundColor: 'transparent', pointRadius: 2, yAxisID: 'y1' },
+                { label: 'SOC (%)', data: [84,82,80,79,78.5,78.5], borderColor: '#FF7A00', backgroundColor: 'transparent', pointRadius: 2, yAxisID: 'y2' }
+            ] 
+        },
+        options: { 
+            responsive: true, maintainAspectRatio: false, 
+            plugins: { legend: { display: false } }, 
+            scales: { 
+                x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8892B0', font: {size:10} } },
+                y: { display: true, position: 'left', grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8892B0', font: {size:10} } },
+                y1: { display: true, position: 'right', grid: { display: false }, ticks: { color: '#00E676', font: {size:10} } },
+                y2: { display: true, position: 'right', grid: { display: false }, ticks: { color: '#FF7A00', font: {size:10} } }
+            } 
+        }
+    });
+
+    // =======================================================
+    // ส่วนเสริมสำหรับหน้า Device Temperatures
+    // =======================================================
+    
+    // อัปเดตเวลาหน้า Temp
+    document.getElementById('tempUpdateTime').innerText = `${now.getDate()} ก.ย. ${now.getFullYear()+543} ${now.getHours()}:${now.getMinutes()}`;
+
+    // สร้างลิสต์รายละเอียด 7 อุปกรณ์ด้านขวาล่าง
+    const tempDevices = [
+        { name: 'แบตเตอรี่ (จุดที่ 1)', sub: 'Cell T1', temp: '32.7', color: 'grn', icon: '🔋', hex: '#00E676' },
+        { name: 'แบตเตอรี่ (จุดที่ 2)', sub: 'Cell T2', temp: '33.2', color: 'grn', icon: '🔋', hex: '#00E676' },
+        { name: 'แบตเตอรี่ (จุดที่ 3)', sub: 'Cell T3', temp: '33.5', color: 'grn', icon: '🔋', hex: '#00E676' },
+        { name: 'แบตเตอรี่ (จุดที่ 4)', sub: 'Cell T4', temp: '32.9', color: 'grn', icon: '🔋', hex: '#00E676' },
+        { name: 'อุณหภูมิ MOS (BMS)', sub: 'BMS', temp: '34.2', color: 'blue', icon: '🧠', hex: '#00D2FF' },
+        { name: 'อุณหภูมิคอนโทรลเลอร์', sub: 'Controller', temp: '41.7', color: 'org', icon: '🎛️', hex: '#FF7A00' },
+        { name: 'อุณหภูมิมอเตอร์', sub: 'Motor', temp: '38.6', color: 'purp', icon: '⚙️️', hex: '#B388FF' }
+    ];
+    
+    let tListHTML = '';
+    tempDevices.forEach(d => {
+        tListHTML += `
+        <div class="t-list-item">
+            <div class="t-list-left">
+                <div class="t-list-icon bg-${d.color} tc-${d.color}">${d.icon}</div>
+                <div class="t-list-text"><div class="tit">${d.name}</div><div class="sub">${d.sub}</div></div>
+            </div>
+            <div class="t-list-right">
+                <div class="t-list-val">${d.temp} °C</div>
+                <div class="t-list-stat tc-grn"><div class="t-dot bg-grn" style="background:#00E676; width:6px; height:6px;"></div>ปกติ</div>
+            </div>
+        </div>`;
+    });
+    document.getElementById('temp-list-container').innerHTML = tListHTML;
+
+    // สร้างกราฟอุณหภูมิรวม 7 เส้น
+    const ctxMultiTemp = document.getElementById('multiTempChart').getContext('2d');
+    new Chart(ctxMultiTemp, {
+        type: 'line',
+        data: {
+            labels: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00'],
+            datasets: [
+                { label: 'แบตฯ (จุด1)', data: [32, 32.5, 32.7, 33, 33.2, 32.8, 32.7], borderColor: '#00E676', borderWidth: 2, pointRadius: 2, tension: 0.4 },
+                { label: 'แบตฯ (จุด2)', data: [32.5, 33, 33.2, 33.5, 33.8, 33.4, 33.2], borderColor: '#00BFA5', borderWidth: 2, pointRadius: 2, tension: 0.4 },
+                { label: 'แบตฯ (จุด3)', data: [33, 33.2, 33.5, 33.8, 34, 33.7, 33.5], borderColor: '#00C853', borderWidth: 2, pointRadius: 2, tension: 0.4 },
+                { label: 'แบตฯ (จุด4)', data: [32.2, 32.6, 32.9, 33.1, 33.5, 33.1, 32.9], borderColor: '#64DD17', borderWidth: 2, pointRadius: 2, tension: 0.4 },
+                { label: 'BMS', data: [33.5, 33.8, 34, 34.2, 34.5, 34.3, 34.2], borderColor: '#00D2FF', borderWidth: 2, pointRadius: 2, tension: 0.4 },
+                { label: 'Controller', data: [39, 40, 41.5, 42, 42.5, 41.8, 41.7], borderColor: '#FF7A00', borderWidth: 2, pointRadius: 2, tension: 0.4 },
+                { label: 'Motor', data: [37, 37.5, 38, 38.8, 39.5, 38.9, 38.6], borderColor: '#B388FF', borderWidth: 2, pointRadius: 2, tension: 0.4 }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8892B0', font: {size: 11} } },
+                y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8892B0', font: {size: 11} }, min: 0, max: 80 }
+            }
+        }
+    });
 
     // =======================================================
     // 4. ดึงข้อมูล Firebase (คงเดิม)
