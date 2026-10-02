@@ -310,8 +310,8 @@
             border-radius: 6px; 
             
             /* 1. กำหนดความกว้างและความสูงของกรอบตรงนี้เลยครับ */
-            width: 40px;    /* 👈 ลองลด/เพิ่ม ความกว้างตรงนี้ (เช่น 50px, 60px) */
-            height: 22px;   /* 👈 ลองลด/เพิ่ม ความสูงตรงนี้ (เช่น 28px, 35px) */
+            width: 76px;    /* 👈 ลองลด/เพิ่ม ความกว้างตรงนี้ (เช่น 50px, 60px) */
+            height: 25px;   /* 👈 ลองลด/เพิ่ม ความสูงตรงนี้ (เช่น 28px, 35px) */
             padding: 0;     /* เอา padding ออก เพื่อให้กรอบไม่ขยายบวม */
             
             /* จัดตัวหนังสือให้อยู่กึ่งกลางกรอบเป๊ะๆ */
@@ -320,7 +320,7 @@
             justify-content: center;
             align-items: center;
 
-            font-size: 9px; /* ขนาดชื่ออุปกรณ์ (T1, Controller ฯลฯ) */
+            font-size: 5px; /* ขนาดชื่ออุปกรณ์ (T1, Controller ฯลฯ) */
             font-weight: 600; 
             backdrop-filter: blur(4px); 
             z-index: 2; 
@@ -329,7 +329,7 @@
         
         .sch-val { 
             display: block; 
-            font-size: 11px; /* ขนาดตัวเลขอุณหภูมิ */
+            font-size: 8px; /* ขนาดตัวเลขอุณหภูมิ */
             font-weight: 700; 
             color: #FFF; 
             margin-top: 1px; 
@@ -775,16 +775,23 @@
                     <img src="system-schematic.png" style="width: 80%; opacity: 0.3;" alt="Schematic" onerror="this.style.display='none'">
                     
                     <!-- ป้ายแท็กตำแหน่งต่างๆ (ใช้ CSS จัดให้อยู่ตำแหน่งเหมือนในภาพ) -->
-                    <div class="sch-label tc-org" style="top: 20%; left: 10%; border-color:#FF7A00;">Controller<span class="sch-val">41.7°C</span></div>
-                    <div class="sch-label tc-purp" style="top: 20%; right: 10%; border-color:#B388FF;">Motor<span class="sch-val">38.6°C</span></div>
-                    <div class="sch-label tc-blue" style="bottom: 45%; right: 15%; border-color:#00D2FF;">BMS<span class="sch-val">34.2°C</span></div>
+                    <div class="sch-label tc-org" style="top: 21%; left: 5.5%; border-color:#FF7A00;">Controller<span class="sch-val">41.7°C</span></div>
+                    <div class="sch-label tc-purp" style="top: 21%; right: 4.9%; border-color:#B388FF;">Motor<span class="sch-val">38.6°C</span></div>
+                    <div class="sch-label tc-blue" style="bottom: 48.3%; right: 6%; border-color:#00D2FF;">BMS<span class="sch-val">34.2°C</span></div>
                     
                     <!-- แท็กแบตเตอรี่ 4 จุด เรียงด้านล่าง -->
-                    <div style="position: absolute; bottom: 19%; left: 0; width: 100%; display: flex; justify-content: center; gap: 5px; padding: 0 10px; box-sizing: border-box;">
-                        <div class="sch-label tc-grn" style="position:relative; border-color:#00E676;">T1<span class="sch-val">32.7°C</span></div>
-                        <div class="sch-label tc-grn" style="position:relative; border-color:#00E676;">T2<span class="sch-val">33.2°C</span></div>
-                        <div class="sch-label tc-grn" style="position:relative; border-color:#00E676;">T3<span class="sch-val">33.5°C</span></div>
-                        <div class="sch-label tc-grn" style="position:relative; border-color:#00E676;">T4<span class="sch-val">32.9°C</span></div>
+                    <!-- แท็กแบตเตอรี่ 4 จุด (ปรับระยะห่างแยกกันได้อิสระ) -->
+<div style="position: absolute; bottom: 20%; left: 0; width: 100%; display: flex; justify-content: center; align-items: center;">
+    <!-- T1: ดันไปทางขวา 30px -->
+    <div class="sch-label tc-grn" style="position:relative; margin-right: 20px;">T1<span class="sch-val">32.7°C</span></div>
+    <!-- T2: ดันไปทางขวา 30px -->
+    <div class="sch-label tc-grn" style="position:relative; margin-right: 10px;">T2<span class="sch-val">33.2°C</span></div> 
+    <!-- T3: ดันไปทางขวา 30px -->
+    <div class="sch-label tc-grn" style="position:relative; margin-right: 30px;">T3<span class="sch-val">33.5°C</span></div>
+    <!-- T4: ตัวสุดท้ายไม่ต้องดัน -->
+    <div class="sch-label tc-grn" style="position:relative;">T4<span class="sch-val">32.9°C</span></div>
+    
+</div>
                     </div>
                 </div>
             </div>
