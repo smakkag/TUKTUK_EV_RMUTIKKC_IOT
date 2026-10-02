@@ -387,10 +387,12 @@
             .temp-header { flex-direction: column; align-items: flex-start; gap: 10px; }
         }
 
-        /* =========================================
+       /* =========================================
            📱 โหมดมือถือ (Responsive Mobile-friendly)
            ========================================= */
         @media (max-width: 768px) {
+            
+            /* --- ส่วนที่ 1: จัดหน้า Dashboard --- */
             .sidebar { transform: translateX(-100%); } 
             .sidebar.show-mobile { transform: translateX(0); box-shadow: 10px 0 30px rgba(0,0,0,0.8); } 
             
@@ -407,7 +409,23 @@
             .speed-val { font-size: 56px; }
             .temp-val { font-size: 36px; }
             .odo-display { position: relative; bottom: auto; right: auto; text-align: center; margin-top: 20px; }
+
+            /* --- ส่วนที่ 2: จัดหน้า Tempdevice (ปรับให้พอดีรูป) --- */
+            /* 1. ย่อความสูงกล่องลง เพื่อให้ตำแหน่งที่ล็อก % ไว้ไม่เคลื่อน */
+            .schematic-box {
+                height: 200px; /* 👈 ลองปรับตัวเลขนี้ดู (เช่น 180px, 220px) ถ้าป้ายยังลอยหรือจมไป */
+            }
+            
+            /* 2. ย่อขนาดป้ายและตัวอักษรลงนิดหน่อย ไม่ให้เบียดกันในจอมือถือ */
+            .sch-label {
+                width: 38px !important;
+                height: 22px !important;
+            }
+            .sch-val {
+                font-size: 8px !important;
+            }
         }
+
     </style>
 </head>
 <body>
