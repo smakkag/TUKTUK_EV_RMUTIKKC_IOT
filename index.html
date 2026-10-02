@@ -41,6 +41,34 @@
         .login-btn:hover { background: #e66e00; }
         #login-error { color: #FF5252; margin-top: 15px; font-size: 14px; font-weight: 500; display: none; }
 
+        /* =========================================
+           สไตล์สำหรับโลโก้มหาวิทยาลัย (Sidebar)
+           ========================================= */
+        .sidebar-brand {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            margin-top: 10px;
+        }
+        .uni-logo {
+            width: 110px; /* 👈 ปรับขนาดความกว้างของโลโก้ตรงนี้ (เช่น 90px, 100px) */
+            height: auto;
+            margin-bottom: 12px; /* ระยะห่างระหว่างโลโก้กับตัวหนังสือ EV TUKTUK */
+            /* border-radius: 50%; */ /* 👈 ถ้าโลโก้เป็นสี่เหลี่ยมแล้วอยากให้เป็นวงกลม ให้เอาเครื่องหมาย /* ออกครับ */
+        }
+        .brand-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: #FFFFFF; /* 👈 เปลี่ยนสีหลักเป็นสีขาว */
+            letter-spacing: 1px;
+            text-align: center;
+        }
+        .brand-name span {
+            color: #FF7A00; /* 👈 สั่งให้ตัวที่อยู่ใน span เป็นสีส้ม */
+        }
+
         /* --- 2. แถบควบคุมด้านบน (Top Controls) --- */
         #menu-toggle {
             position: fixed; top: 15px; left: 20px; z-index: 100;
@@ -407,7 +435,10 @@
 
 <!-- แถบเมนูด้านข้าง -->
 <div class="sidebar" id="sidebar-menu">
-    <div class="sidebar-logo">EV <span>TUKTUK</span></div>
+    <div class="sidebar-brand">
+        <img src="logo_rmutikkc.png" alt="University Logo" class="uni-logo" onerror="this.style.display='none'">
+        <div class="brand-name">EV <span>TUKTUK</span></div>
+    </div>
     <!-- ❗️ เพิ่มฟังก์ชัน onclick เพื่อสลับหน้า -->
     <div class="menu-item active" id="menu-dashboard" onclick="switchPage('dashboard')">Dashboard</div>
     <div class="menu-item" id="menu-battery" onclick="switchPage('battery')">Battery</div>
